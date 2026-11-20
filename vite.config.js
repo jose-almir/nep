@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite'
 import tailwindcss from '@tailwindcss/vite'
 
-// Served from almirdev.com/nep (GitHub Pages project site).
-export default defineConfig({ base: '/nep/', plugins: [tailwindcss()] })
+// Served from the root of nep.almirdev.com (GitHub Pages custom domain).
+export default defineConfig({ plugins: [tailwindcss()] })

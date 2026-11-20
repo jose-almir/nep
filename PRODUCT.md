@@ -8,7 +8,7 @@ web
 
 ## Stack
 
-Delegated: Vite + Tailwind CSS v4 (`@tailwindcss/vite`), static build. Hosted on GitHub Pages under the user's domain at `almirdev.com/nep` (repo `jose-almir/nep`, Vite `base: '/nep/'`). Local only until the user asks to publish.
+Delegated: Vite + Tailwind CSS v4 (`@tailwindcss/vite`), static build. Hosted on GitHub Pages at the custom subdomain `nep.almirdev.com` (repo `jose-almir/nep`, deployed by GitHub Actions; Vite serves from `/`).
 
 ## Users
 
