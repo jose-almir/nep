@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Flores que alimentam as abelhas em Ubajara (CE): quando cada espécie floresce e onde encontrá-la." />
+    <meta name="theme-color" content="#141414" />
+    <link rel="icon" type="image/png" href="./src/img/logo.png" />
+    <title>NEP · Abelhas e flores de Ubajara</title>
+    <script type="module" src="./src/main.js"></script>
+  </head>
+  <body class="bg-white font-sans text-tinta antialiased">
+    <a href="#conteudo" class="sr-only z-50 rounded-full bg-mel px-4 py-2 font-bold focus:not-sr-only focus:fixed focus:top-3 focus:left-3">Pular para o conteúdo</a>
+
+    <header class="sticky top-0 z-40 border-b-4 border-mel bg-white">
+      <div class="relative mx-auto flex max-w-7xl items-center gap-4 px-4 py-2 lg:px-8">
+        <a href="#inicio" class="flex items-center gap-3">
+          <img src="./src/img/logo.png" alt="" width="112" height="93" class="h-11 w-auto lg:h-14" />
+          <span class="leading-none">
+            <span class="block text-3xl font-black tracking-tight lg:text-4xl">NEP</span>
+            <span class="hidden text-xs font-semibold sm:block">Natureza em Equilíbrio pela Polinização</span>
+          </span>
+        </a>
+
+        <button id="menu-btn" type="button" class="ml-auto grid size-11 place-items-center rounded-full hover:bg-mel/40 md:hidden" aria-expanded="false" aria-controls="menu">
+          <i data-lucide="menu"></i>
+          <span class="sr-only">Menu</span>
+        </button>
+
+        <nav id="menu" aria-label="Principal" class="absolute inset-x-0 top-full hidden border-b-4 border-mel bg-white md:static md:ml-auto md:block md:border-0 md:border-l-2 md:border-tinta md:pl-6">
+          <ul class="flex flex-col gap-1 p-4 md:flex-row md:p-0">
+            <li><a href="#inicio" class="nav-link" aria-current="true"><i data-lucide="house" class="size-5"></i>Início</a></li>
+            <li><a href="#flores" class="nav-link"><i data-lucide="flower-2" class="size-5"></i>Flores</a></li>
+            <li data-pendente><a href="#mapas" class="nav-link"><i data-lucide="map-pin" class="size-5"></i>Mapas</a></li>
+            <li><a href="#sobre" class="nav-link"><i data-lucide="info" class="size-5"></i>Sobre</a></li>
+            <li><a href="#contato" class="nav-link"><i data-lucide="mail" class="size-5"></i>Contato</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="conteudo">
+      <!-- Hero -->
+      <section id="inicio" class="escuro relative overflow-hidden bg-mata text-white">
+        <div class="favo absolute inset-y-0 left-0 hidden w-24 opacity-80 lg:block" aria-hidden="true"></div>
+        <div class="mx-auto max-w-7xl">
+          <img
+            src="./src/img/hero.jpg"
+            alt="Abelha coletando pólen em uma flor branca"
+            width="510"
+            height="308"
+            class="aspect-5/3 w-full object-cover mask-[linear-gradient(to_bottom,#000_70%,transparent)] md:absolute md:inset-y-0 md:right-0 md:aspect-auto md:h-full md:w-1/2 md:mask-[linear-gradient(to_right,transparent,#000_30%)]"
+          />
+          <div class="relative px-4 pt-2 pb-10 md:w-1/2 md:py-14 md:pr-6 md:pl-8 lg:pl-32">
+            <p class="hidden text-7xl font-black tracking-tight md:block lg:text-8xl" aria-hidden="true">NEP</p>
+            <h1 class="text-3xl leading-snug font-black md:mt-2 lg:text-4xl">
+              Conectando <span class="text-mel">abelhas</span> e <span class="text-mel">flores</span> por um mundo mais vivo!
+            </h1>
+            <p class="mt-4 max-w-md text-lg text-white/90">Descubra quais flores alimentam as abelhas em Ubajara e em que época cada uma floresce.</p>
+            <a href="#flores" class="btn mt-6">Explorar as flores <i data-lucide="chevron-right" class="size-5"></i></a>
+          </div>
+        </div>
+        <p class="pointer-events-none absolute top-8 right-8 hidden -rotate-12 font-mao text-4xl leading-none [text-shadow:0_2px_10px_rgb(0_0_0/0.7)] lg:block" aria-hidden="true">Juntos por<br />a natureza!</p>
+      </section>
+
+      <!-- Espécies -->
+      <section id="flores" class="mx-auto max-w-7xl px-4 py-12 lg:px-8" aria-labelledby="flores-titulo">
+        <h2 id="flores-titulo" class="titulo-secao"><i data-lucide="flower-2" class="size-7 shrink-0"></i><span class="shrink-0">Espécies de flores</span></h2>
+
+        <div class="mt-6 flex flex-col gap-4">
+          <label class="relative block sm:max-w-sm">
+            <span class="sr-only">Buscar flores</span>
+            <i data-lucide="search" class="pointer-events-none absolute top-1/2 left-4 size-5 -translate-y-1/2 text-tinta/60"></i>
+            <input id="busca" type="search" placeholder="Buscar flores..." autocomplete="off" class="w-full rounded-full border-2 border-tinta/15 bg-white py-2.5 pr-4 pl-11 placeholder:text-tinta/60 focus:border-tinta" />
+          </label>
+
+          <fieldset class="min-w-0">
+            <legend class="mb-2 text-sm font-bold">Florescendo em</legend>
+            <div id="meses" class="grid grid-cols-6 gap-2 sm:flex sm:flex-wrap"></div>
+          </fieldset>
+        </div>
+
+        <div class="mt-6 flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+          <p id="contagem" class="text-sm font-semibold text-tinta/75" aria-live="polite"></p>
+          <p class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-tinta/75">
+            <span class="flex items-center gap-1.5"><span class="size-4 rounded bg-mel"></span>Floresce</span>
+            <span class="flex items-center gap-1.5"><span class="size-4 rounded bg-tinta/6 ring-2 ring-tinta ring-offset-1"></span><span>Este mês (<span id="nome-mes-atual"></span>)</span></span>
+          </p>
+        </div>
+
+        <div class="mt-4 overflow-x-auto rounded-2xl border border-tinta/10 bg-favo p-3 sm:p-5">
+          <table id="calendario" class="w-full table-fixed border-separate border-spacing-1 text-sm">
+            <caption class="mb-2 px-1 text-left text-lg font-extrabold">Calendário de floração</caption>
+            <colgroup><col class="w-24 sm:w-40" /></colgroup>
+            <thead><tr></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <ul id="lista-especies" class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4"></ul>
+
+        <div id="vazio" class="mt-4 hidden rounded-2xl bg-favo p-8 text-center">
+          <p class="font-bold">Nenhuma espécie encontrada com esses filtros.</p>
+          <button id="limpar" type="button" class="btn mt-4">Limpar filtros</button>
+        </div>
+      </section>
+
+      <!-- Mapas -->
+      <section id="mapas" data-pendente class="bg-favo py-12" aria-labelledby="mapas-titulo">
+        <div class="mx-auto max-w-7xl px-4 lg:px-8">
+          <h2 id="mapas-titulo" class="titulo-secao"><i data-lucide="map-pin" class="size-7 shrink-0"></i><span class="shrink-0">Mapas de Ubajara</span></h2>
+          <p class="mx-auto mt-4 max-w-prose text-center text-lg">Onde a equipe do NEP encontrou cada espécie na região de Ubajara.</p>
+
+          <div class="mt-8 grid gap-5 lg:grid-cols-3">
+            <div class="x-box aspect-4/3 lg:col-span-2 lg:aspect-16/10">
+              <span class="x-box-rotulo">Mapa da região · aguardando arquivo</span>
+            </div>
+            <ul class="grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
+              <li class="x-box min-h-28"><span class="x-box-rotulo">Área 1 · a definir</span></li>
+              <li class="x-box min-h-28"><span class="x-box-rotulo">Área 2 · a definir</span></li>
+              <li class="x-box min-h-28"><span class="x-box-rotulo">Área 3 · a definir</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sobre / importância / como ajudar -->
+      <section class="mx-auto grid max-w-7xl gap-5 px-4 py-12 lg:grid-cols-[1fr_1.4fr_1fr] lg:px-8" aria-label="Sobre o projeto">
+        <article id="sobre" class="escuro rounded-2xl bg-tinta p-6 text-white">
+          <h2 class="text-xl font-extrabold text-mel">Sobre o NEP</h2>
+          <p class="mt-2 text-white/90">O NEP é um projeto dedicado à preservação das abelhas e da biodiversidade. Mostra a importância das flores e da polinização para o meio ambiente e para a agricultura.</p>
+        </article>
+
+        <article class="escuro flex flex-col gap-5 overflow-hidden rounded-2xl bg-tinta p-6 text-white sm:flex-row sm:items-center">
+          <div class="flex-1">
+            <h2 class="flex items-start gap-2 text-xl font-extrabold text-mel"><i data-lucide="leaf" class="mt-0.5 size-6 shrink-0"></i>Por que as abelhas são importantes?</h2>
+            <ul class="mt-4 space-y-3">
+              <li class="flex items-center gap-3"><span class="grid size-6 shrink-0 place-items-center rounded-full bg-mel text-tinta"><i data-lucide="check" class="size-4"></i></span>Polinizam plantas e produzem alimentos</li>
+              <li class="flex items-center gap-3"><span class="grid size-6 shrink-0 place-items-center rounded-full bg-mel text-tinta"><i data-lucide="check" class="size-4"></i></span>Mantêm o equilíbrio ambiental</li>
+              <li class="flex items-center gap-3"><span class="grid size-6 shrink-0 place-items-center rounded-full bg-mel text-tinta"><i data-lucide="check" class="size-4"></i></span>Ajudam na produção agrícola</li>
+            </ul>
+          </div>
+          <img src="./src/img/abelha.jpg" alt="Abelha pousada numa flor amarela" width="185" height="150" class="h-40 w-full rounded-xl object-cover sm:h-auto sm:w-40" loading="lazy" />
+        </article>
+
+        <article id="preservacao" class="rounded-2xl border border-tinta/10 bg-favo p-6">
+          <h2 class="flex items-center gap-2 rounded-xl bg-mel px-4 py-2 text-xl font-extrabold"><i data-lucide="shield-check" class="size-6"></i>Como ajudar?</h2>
+          <ul class="mt-4 space-y-3 px-1">
+            <li class="flex items-center gap-3"><i data-lucide="tree-deciduous" class="size-5 shrink-0"></i>Preserve as flores nativas</li>
+            <li class="flex items-center gap-3"><i data-lucide="ban" class="size-5 shrink-0"></i>Evite o uso de agrotóxicos</li>
+            <li class="flex items-center gap-3"><i data-lucide="recycle" class="size-5 shrink-0"></i>Cuide do meio ambiente</li>
+          </ul>
+          <p class="mt-5 flex items-center justify-center gap-2 rounded-full bg-tinta px-4 py-2 text-sm font-bold text-mel">Juntos fazemos a diferença! <i data-lucide="heart" class="size-4 fill-current"></i></p>
+        </article>
+      </section>
+    </main>
+
+    <footer id="contato" class="escuro relative overflow-hidden bg-tinta text-white">
+      <div class="favo absolute -right-6 bottom-0 hidden h-full w-28 opacity-60 lg:block" aria-hidden="true"></div>
+      <div class="relative mx-auto flex max-w-7xl flex-col items-center gap-6 px-4 py-10 text-center lg:flex-row lg:justify-between lg:px-8 lg:text-left">
+        <div class="flex items-center gap-3">
+          <img src="./src/img/logo.png" alt="" width="112" height="93" class="h-14 w-auto rounded-full bg-white" loading="lazy" />
+          <div class="text-left">
+            <p class="text-3xl font-black">NEP</p>
+            <p class="text-sm text-white/85 italic">Natureza em Equilíbrio pela Polinização</p>
+          </div>
+        </div>
+
+        <div data-pendente class="flex flex-col items-center gap-3 sm:flex-row">
+          <div class="x-box min-h-0 border-white/40 bg-transparent px-5 py-2 bg-none">
+            <span class="text-sm font-bold text-white/85">Contato · a definir</span>
+          </div>
+          <ul class="flex gap-3" aria-label="Redes sociais (a definir)">
+            <li class="x-box size-11 rounded-full p-0"><span class="sr-only">Rede social a definir</span></li>
+            <li class="x-box size-11 rounded-full p-0"><span class="sr-only">Rede social a definir</span></li>
+            <li class="x-box size-11 rounded-full p-0"><span class="sr-only">Rede social a definir</span></li>
+          </ul>
+        </div>
+
+        <p class="text-lg italic underline decoration-mel decoration-2 underline-offset-8">Mais flores, mais abelhas, um futuro melhor.</p>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+@theme {
+  --color-mel: #f7c51e;
+  --color-mel-escuro: #d9a400;
+  --color-favo: #fff7dc;
+  --color-tinta: #141414;
+  --color-mata: #232c0e;
+  --font-sans: "Nunito Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mao: "Caveat", cursive;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    scrollbar-color: var(--color-mel) var(--color-tinta);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+  body {
+    caret-color: var(--color-mel-escuro);
+    accent-color: var(--color-mel);
+  }
+  ::selection {
+    background: var(--color-mel);
+    color: var(--color-tinta);
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-tinta);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  .escuro :focus-visible { outline-color: var(--color-mel); }
+  h1, h2, h3 { text-wrap: balance; }
+}
+
+@layer components {
+  /* Honeycomb line pattern from the concept. */
+  .favo {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='98'%3E%3Cpath d='M28 66L0 50V18L28 2l28 16v32zM28 98V66M0 18L-28 2M56 18l28-16' fill='none' stroke='%23f7c51e' stroke-width='3'/%3E%3C/svg%3E");
+    background-size: 56px 98px;
+  }
+
+  /* Wireframe box for content the team has not delivered yet. */
+  .x-box {
+    position: relative;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+    border: 2px dashed color-mix(in oklab, var(--color-tinta) 35%, transparent);
+    border-radius: 1rem;
+    background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M0 0L100 100M100 0L0 100' stroke='%23141414' stroke-opacity='.22' stroke-width='1.5' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+    text-align: center;
+  }
+  .x-box-rotulo {
+    @apply rounded-full bg-white px-3 py-1 text-sm font-bold text-tinta/80 ring-1 ring-tinta/15;
+  }
+
+  .titulo-secao {
+    @apply flex items-center justify-center gap-3 text-2xl font-black tracking-tight sm:text-3xl;
+  }
+  .titulo-secao::before,
+  .titulo-secao::after {
+    content: "";
+    @apply hidden h-[3px] flex-1 rounded-full bg-mel sm:block;
+  }
+
+  .btn {
+    @apply inline-flex items-center gap-2 rounded-full bg-mel px-6 py-3 font-extrabold text-tinta transition-colors hover:bg-mel-escuro;
+  }
+
+  .nav-link {
+    @apply flex items-center gap-2 rounded-full px-4 py-2 font-semibold transition-colors hover:bg-mel/40;
+  }
+  .nav-link[aria-current="true"] { @apply bg-mel; }
+
+  .chip {
+    @apply relative inline-flex min-h-11 shrink-0 items-center justify-center rounded-full border-2 border-tinta/15 bg-white px-3.5 text-sm font-bold capitalize transition-colors hover:border-tinta/40;
+  }
+  .chip[aria-pressed="true"] { @apply border-tinta bg-tinta text-mel; }
+}
+
+/* Pending content (maps, contact, socials). Add class="ocultar-pendentes" to <html> to hide it all. */
+.ocultar-pendentes [data-pendente] { display: none !important; }
+
+::view-transition-group(*) {
+  animation-duration: 350ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
