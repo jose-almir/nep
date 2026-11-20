@@ -64,7 +64,7 @@ function cartao(e) {
     <article class="flex h-full flex-col overflow-hidden rounded-2xl border border-tinta/10 bg-favo">
       <img src="${e.foto}" alt="${e.alt}" width="350" height="140" loading="lazy" class="aspect-[5/2] w-full object-cover" />
       <div class="flex flex-1 flex-col px-4 pb-5 text-center">
-        <h3 class="relative mx-auto -mt-5 rounded-full bg-mel px-5 py-1.5 text-xl font-extrabold">${e.nome}</h3>
+        <h3 class="relative mx-auto -mt-5 rounded-lg bg-mel px-4 py-1 text-lg font-extrabold lg:text-xl">${e.nome}</h3>
         <p class="mt-1 text-tinta/75 italic">${e.cientifico}</p>
         <p class="mt-3 text-sm text-balance"><i data-lucide="calendar-days" class="mr-1 inline size-4 align-[-3px]"></i><b>Floração:</b> ${e.floracao}</p>
         <div class="mt-auto">${faixaMeses(e.meses)}</div>

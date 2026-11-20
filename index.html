@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="Flores que alimentam as abelhas em Ubajara (CE): quando cada espécie floresce e onde encontrá-la." />
     <meta name="theme-color" content="#141414" />
+    <link rel="canonical" href="https://nep.almirdev.com/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content="NEP" />
+    <meta property="og:url" content="https://nep.almirdev.com/" />
+    <meta property="og:title" content="NEP · Abelhas e flores de Ubajara" />
+    <meta property="og:description" content="Flores que alimentam as abelhas em Ubajara (CE): quando cada espécie floresce e onde encontrá-la." />
+    <meta property="og:image" content="https://nep.almirdev.com/og.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Página do NEP: abelha numa flor branca e o título Conectando abelhas e flores." />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" type="image/png" href="./src/img/logo.png" />
     <title>NEP · Abelhas e flores de Ubajara</title>
     <script type="module" src="./src/main.js"></script>
@@ -14,10 +26,10 @@
 
     <header class="sticky top-0 z-40 border-b-4 border-mel bg-white">
       <div class="relative mx-auto flex max-w-7xl items-center gap-4 px-4 py-2 lg:px-8">
-        <a href="#inicio" class="flex items-center gap-3">
+        <a href="#inicio" class="group flex items-center gap-3">
           <img src="./src/img/logo.png" alt="" width="112" height="93" class="h-11 w-auto lg:h-14" />
           <span class="leading-none">
-            <span class="block text-3xl font-black tracking-tight lg:text-4xl">NEP</span>
+            <span class="block text-3xl font-black tracking-tight decoration-mel decoration-4 underline-offset-4 group-hover:underline lg:text-4xl">NEP</span>
             <span class="hidden text-xs font-semibold sm:block">Natureza em Equilíbrio pela Polinização</span>
           </span>
         </a>
@@ -60,7 +72,7 @@
             <a href="#flores" class="btn mt-6">Explorar as flores <i data-lucide="chevron-right" class="size-5"></i></a>
           </div>
         </div>
-        <p class="pointer-events-none absolute top-8 right-8 hidden -rotate-12 font-mao text-4xl leading-none [text-shadow:0_2px_10px_rgb(0_0_0/0.7)] lg:block" aria-hidden="true">Juntos por<br />a natureza!</p>
+        <p class="pointer-events-none absolute top-8 right-8 hidden -rotate-12 rounded-xl bg-mata px-4 py-2 font-mao text-4xl leading-none lg:block" aria-hidden="true">Juntos por<br />a natureza!</p>
       </section>
 
       <!-- Espécies -->
@@ -125,15 +137,16 @@
       </section>
 
       <!-- Sobre / importância / como ajudar -->
-      <section class="mx-auto grid max-w-7xl gap-5 px-4 py-12 lg:grid-cols-[1fr_1.4fr_1fr] lg:px-8" aria-label="Sobre o projeto">
+      <section class="mx-auto grid max-w-7xl gap-5 px-4 py-12 lg:grid-cols-[1fr_1.4fr_1fr] lg:px-8" aria-labelledby="projeto-titulo">
+        <h2 id="projeto-titulo" class="sr-only">Sobre o projeto</h2>
         <article id="sobre" class="escuro rounded-2xl bg-tinta p-6 text-white">
-          <h2 class="text-xl font-extrabold text-mel">Sobre o NEP</h2>
+          <h3 class="text-lg font-extrabold lg:text-xl text-mel">Sobre o NEP</h3>
           <p class="mt-2 text-white/90">O NEP é um projeto dedicado à preservação das abelhas e da biodiversidade. Mostra a importância das flores e da polinização para o meio ambiente e para a agricultura.</p>
         </article>
 
         <article class="escuro flex flex-col gap-5 overflow-hidden rounded-2xl bg-tinta p-6 text-white sm:flex-row sm:items-center">
           <div class="flex-1">
-            <h2 class="flex items-start gap-2 text-xl font-extrabold text-mel"><i data-lucide="leaf" class="mt-0.5 size-6 shrink-0"></i>Por que as abelhas são importantes?</h2>
+            <h3 class="flex items-start gap-2 text-lg font-extrabold lg:text-xl text-mel"><i data-lucide="leaf" class="mt-0.5 size-6 shrink-0"></i>Por que as abelhas são importantes?</h3>
             <ul class="mt-4 space-y-3">
               <li class="flex items-center gap-3"><span class="grid size-6 shrink-0 place-items-center rounded-full bg-mel text-tinta"><i data-lucide="check" class="size-4"></i></span>Polinizam plantas e produzem alimentos</li>
               <li class="flex items-center gap-3"><span class="grid size-6 shrink-0 place-items-center rounded-full bg-mel text-tinta"><i data-lucide="check" class="size-4"></i></span>Mantêm o equilíbrio ambiental</li>
@@ -144,7 +157,7 @@
         </article>
 
         <article id="preservacao" class="rounded-2xl border border-tinta/10 bg-favo p-6">
-          <h2 class="flex items-center gap-2 rounded-xl bg-mel px-4 py-2 text-xl font-extrabold"><i data-lucide="shield-check" class="size-6"></i>Como ajudar?</h2>
+          <h3 class="flex items-center gap-2 rounded-xl bg-mel px-4 py-2 text-lg font-extrabold lg:text-xl"><i data-lucide="shield-check" class="size-6"></i>Como ajudar?</h3>
           <ul class="mt-4 space-y-3 px-1">
             <li class="flex items-center gap-3"><i data-lucide="tree-deciduous" class="size-5 shrink-0"></i>Preserve as flores nativas</li>
             <li class="flex items-center gap-3"><i data-lucide="ban" class="size-5 shrink-0"></i>Evite o uso de agrotóxicos</li>
