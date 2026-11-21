@@ -19,6 +19,10 @@
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
   }
+  /* Big screens and projectors: scale the whole rem-based layout so it reads from across a room. */
+  @media (min-width: 1800px) { html { font-size: 112.5%; } }
+  @media (min-width: 2400px) { html { font-size: 137.5%; } }
+  @media (min-width: 3200px) { html { font-size: 175%; } }
   body {
     caret-color: var(--color-mel-escuro);
     accent-color: var(--color-mel);
@@ -58,6 +62,16 @@
     @apply rounded-full bg-white px-3 py-1 text-sm font-bold text-tinta/80 ring-1 ring-tinta/15;
   }
 
+  /* Photo credit pinned to a corner of the image, as news sites do. */
+  .credito {
+    @apply absolute max-w-[calc(100%-0.75rem)] truncate rounded bg-black/25 px-1.5 py-0.5 text-[0.625rem] leading-tight text-white/75 backdrop-blur-sm transition-colors hover:bg-black/60 hover:text-white focus-visible:bg-black/60 focus-visible:text-white;
+  }
+
+  /* Yellow/black "under construction" tape for the site-wide WIP notice. */
+  .faixa-obra {
+    background: repeating-linear-gradient(-45deg, var(--color-mel) 0 14px, var(--color-tinta) 14px 28px);
+  }
+
   .titulo-secao {
     @apply flex items-center justify-center gap-3 text-2xl font-black tracking-tight lg:text-3xl;
   }
@@ -88,4 +102,14 @@
 ::view-transition-group(*) {
   animation-duration: 350ms;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Map. Unlayered on purpose: leaflet.css is unlayered too and would beat anything inside @layer. */
+.leaflet-container { font: inherit; }
+/* Leaflet draws 30px zoom buttons on touch screens; give fingers a 44px target. */
+@media (pointer: coarse) {
+  .leaflet-touch .leaflet-bar a { width: 44px; height: 44px; line-height: 44px; }
+}
+.marcador {
+  @apply grid place-items-center rounded-full border-2 border-tinta bg-mel text-tinta shadow-md;
 }

@@ -1,10 +1,13 @@
 import '@fontsource-variable/nunito'
 import '@fontsource/caveat/700.css'
+import 'leaflet/dist/leaflet.css'
 import './style.css'
-import { createIcons, House, Flower2, MapPin, Info, Mail, Menu, X, Search, ChevronRight, CalendarDays, Leaf, Check, ShieldCheck, TreeDeciduous, Ban, Recycle, Heart } from 'lucide'
+import L from 'leaflet'
+import { createIcons, House, Flower2, MapPin, Info, Mail, Menu, X, Search, ChevronRight, CalendarDays, Leaf, Check, ShieldCheck, TreeDeciduous, Ban, Recycle, Heart, Construction } from 'lucide'
 import { especies, MESES } from './especies.js'
+import { pontos, PONTOS_DE_EXEMPLO } from './pontos.js'
 
-const icons = { House, Flower2, MapPin, Info, Mail, Menu, X, Search, ChevronRight, CalendarDays, Leaf, Check, ShieldCheck, TreeDeciduous, Ban, Recycle, Heart }
+const icons = { House, Flower2, MapPin, Info, Mail, Menu, X, Search, ChevronRight, CalendarDays, Leaf, Check, ShieldCheck, TreeDeciduous, Ban, Recycle, Heart, Construction }
 const desenharIcones = () => createIcons({ icons, attrs: { 'aria-hidden': 'true' } })
 
 const $ = (s) => document.querySelector(s)
@@ -62,7 +65,10 @@ function cartao(e) {
   return `
   <li style="view-transition-name: esp-${e.id}">
     <article class="flex h-full flex-col overflow-hidden rounded-2xl border border-tinta/10 bg-favo">
-      <img src="${e.foto}" alt="${e.alt}" width="350" height="140" loading="lazy" class="aspect-[5/2] w-full object-cover" />
+      <div class="relative">
+        <img src="${e.foto}" alt="${e.alt}" width="1000" height="400" loading="lazy" class="aspect-[5/2] w-full object-cover" />
+        <a href="${e.credito.fonte}" target="_blank" rel="noopener" class="credito top-1.5 right-1.5" title="Ver foto original e licença">© ${e.credito.autor} · ${e.credito.licenca}<span class="sr-only"> (abre em nova aba)</span></a>
+      </div>
       <div class="flex flex-1 flex-col px-4 pb-5 text-center">
         <h3 class="relative mx-auto -mt-5 rounded-lg bg-mel px-4 py-1 text-lg font-extrabold lg:text-xl">${e.nome}</h3>
         <p class="mt-1 text-tinta/75 italic">${e.cientifico}</p>
@@ -73,25 +79,75 @@ function cartao(e) {
   </li>`
 }
 
+const iconeSvg = (e, classe) =>
+  `<svg viewBox="0 0 24 24" class="${classe}" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${e.icone}</svg>`
+
 const linhaCalendario = (e) => `
   <tr>
-    <th scope="row" class="truncate pr-2 text-left font-bold">${e.nome}</th>
+    <th scope="row" class="truncate pr-2 text-left font-bold">${iconeSvg(e, 'mr-1.5 inline size-4 align-[-3px]')}${e.nome}</th>
     ${MESES.map((_, i) => `<td class="h-7 rounded-md ${celula(e.meses.includes(i + 1), i + 1)}">${e.meses.includes(i + 1) ? '<span class="sr-only">floresce</span>' : ''}</td>`).join('')}
   </tr>`
 
-const marcadorMais = `
-  <li data-pendente class="x-box min-h-24 sm:col-span-full" style="view-transition-name: esp-mais">
-    <span class="x-box-rotulo">Mais espécies do levantamento · a definir</span>
-  </li>`
+/* ---------- Mapa ---------- */
+const mapa = L.map('mapa', { dragging: !L.Browser.mobile }) // phones: one finger scrolls the page, not the map
+const ruas = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19,
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+}).addTo(mapa)
+const satelite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+  maxZoom: 19,
+  maxNativeZoom: 17, // Esri serves a "no data" tile above z17 around Ubajara; upscale z17 instead
+  attribution: 'Imagens &copy; Esri, Maxar, Earthstar Geographics e comunidade de usuários GIS',
+})
+L.control.layers({ Ruas: ruas, 'Satélite': satelite }).addTo(mapa)
+L.control.scale({ imperial: false }).addTo(mapa)
+mapa.fitBounds(pontos.map((p) => [p.lat, p.lng]), { padding: [40, 40] })
+const camadaPontos = L.layerGroup().addTo(mapa)
+$('#mapa-exemplo').classList.toggle('hidden', !PONTOS_DE_EXEMPLO)
 
+const pontosDe = (e) => pontos.filter((p) => p.especie === e.id).map((p) => [p.lat, p.lng])
+function enquadrar(latlngs) {
+  if (!latlngs.length) return
+  mapa.fitBounds(latlngs, { padding: [40, 40], maxZoom: 15 })
+  $('#mapa').scrollIntoView({ block: 'nearest' }) // on phones the list sits below the map
+}
+
+// Legend + text alternative to the map: one button per visible species.
+function itemLegenda(e) {
+  const n = pontosDe(e).length
+  return `<li><button type="button" data-especie="${e.id}" ${n ? '' : 'disabled'} class="flex w-full items-center gap-3 rounded-xl px-2 py-1.5 text-left transition-colors hover:bg-mel/30 disabled:opacity-60 disabled:hover:bg-transparent">
+    <span class="marcador size-9 shrink-0">${iconeSvg(e, 'size-5')}</span>
+    <span class="flex-1"><span class="block font-bold">${e.nome}</span><span class="block text-sm text-tinta/75">${n ? (n === 1 ? '1 ponto' : `${n} pontos`) : 'nenhum ponto ainda'}</span></span>
+    ${n ? '<i data-lucide="chevron-right" class="size-5 shrink-0"></i>' : ''}
+  </button></li>`
+}
+
+function atualizarMapa(visiveis) {
+  camadaPontos.clearLayers()
+  for (const p of pontos) {
+    const e = visiveis.find((v) => v.id === p.especie)
+    if (!e) continue
+    L.marker([p.lat, p.lng], {
+      title: e.nome,
+      icon: L.divIcon({ className: 'marcador', html: iconeSvg(e, 'size-5'), iconSize: [36, 36] }),
+    })
+      .bindPopup(`<b>${e.nome}</b><br><i>${e.cientifico}</i><br>Floração: ${e.floracao}${PONTOS_DE_EXEMPLO ? '<br><small>Ponto fictício (exemplo)</small>' : ''}`)
+      .addTo(camadaPontos)
+  }
+}
+
+let ultimasVisiveis = especies
 function renderizar() {
   const termo = semAcento(filtro.texto.trim())
   const visiveis = especies.filter(
     (e) => semAcento(`${e.nome} ${e.cientifico}`).includes(termo) && (!filtro.mes || e.meses.includes(filtro.mes)),
   )
-  const filtrando = termo || filtro.mes
-  $('#lista-especies').innerHTML = visiveis.map(cartao).join('') + (filtrando ? '' : marcadorMais)
+  $('#lista-especies').innerHTML = visiveis.map(cartao).join('')
   $('#calendario tbody').innerHTML = visiveis.map(linhaCalendario).join('')
+  atualizarMapa(visiveis)
+  $('#legenda-mapa').innerHTML = visiveis.length ? visiveis.map(itemLegenda).join('') : '<li class="px-2 py-1.5 text-sm text-tinta/75">Nenhuma espécie com esses filtros.</li>'
+  $('#ver-todos').hidden = !visiveis.length
+  ultimasVisiveis = visiveis
   $('#calendario').parentElement.classList.toggle('hidden', !visiveis.length)
   $('#vazio').classList.toggle('hidden', visiveis.length > 0)
   const n = visiveis.length
@@ -143,5 +199,11 @@ $('#limpar').addEventListener('click', () => {
   $('#busca').value = ''
   atualizar({ texto: '', mes: 0 })
 })
+
+$('#legenda-mapa').addEventListener('click', (ev) => {
+  const e = especies.find((x) => x.id === ev.target.closest('button[data-especie]')?.dataset.especie)
+  if (e) enquadrar(pontosDe(e))
+})
+$('#ver-todos').addEventListener('click', () => enquadrar(ultimasVisiveis.flatMap(pontosDe)))
 
 renderizar()
