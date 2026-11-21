@@ -1,7 +1,7 @@
-import ipe from './img/ipe.jpg'
-import limao from './img/limao.jpg'
-import girassol from './img/girassol.jpg'
-import maracuja from './img/maracuja.jpg'
+import ipe from './img/ipe.webp'
+import limao from './img/limao.webp'
+import girassol from './img/girassol.webp'
+import maracuja from './img/maracuja.webp'
 
 export const MESES = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro']
 
