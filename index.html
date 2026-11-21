@@ -129,12 +129,17 @@
           <p class="mt-1 text-tinta/75">Onde a equipe do NEP encontrou cada espécie na região de Ubajara.</p>
 
         <div class="mt-5 grid gap-5 lg:grid-cols-3">
-          <div class="flex flex-col overflow-hidden rounded-2xl border border-tinta/10 bg-white lg:col-span-2">
+          <div id="mapa-card" class="flex flex-col overflow-hidden rounded-2xl border border-tinta/10 bg-white lg:col-span-2">
             <div class="flex min-h-11 items-center justify-between gap-3 border-b border-tinta/10 bg-favo px-4 py-1 text-sm">
               <p id="mapa-estado"></p>
-              <button id="mapa-limpar" type="button" class="min-h-11 shrink-0 px-1 font-bold underline decoration-mel decoration-2 underline-offset-4 hover:decoration-tinta">Limpar</button>
+              <div class="flex shrink-0 items-center gap-1">
+                <button id="mapa-limpar" type="button" class="min-h-11 px-1 font-bold underline decoration-mel decoration-2 underline-offset-4 hover:decoration-tinta">Limpar</button>
+                <button id="mapa-cheia" type="button" aria-label="Abrir mapa em tela cheia" title="Tela cheia" class="-mr-2 grid size-11 place-items-center rounded-full hover:bg-mel/40">
+                  <i data-lucide="maximize-2" class="mapa-icone-abrir size-5"></i><i data-lucide="x" class="mapa-icone-fechar size-6"></i>
+                </button>
+              </div>
             </div>
-            <div class="relative isolate aspect-4/3 lg:aspect-16/10">
+            <div class="mapa-caixa relative isolate aspect-4/3 lg:aspect-16/10">
               <div id="mapa" class="size-full" role="region" aria-label="Mapa de Ubajara com os pontos de cada espécie"></div>
               <p id="mapa-exemplo" class="pointer-events-none absolute top-3 left-1/2 z-[650] -translate-x-1/2 whitespace-nowrap rounded-full bg-tinta px-3 py-1 text-xs font-bold text-mel">Exemplo · pontos fictícios</p>
             </div>
@@ -210,5 +215,7 @@
 
     <!-- VLibras: tradutor oficial do governo para Libras (vlibras.gov.br). Inicializa sozinho. -->
     <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <!-- The map card moves in here while full screen (see main.js). -->
+    <dialog id="mapa-dialogo" aria-label="Mapa em tela cheia"></dialog>
   </body>
 </html>

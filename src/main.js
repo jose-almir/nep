@@ -3,11 +3,11 @@ import '@fontsource/caveat/700.css'
 import 'leaflet/dist/leaflet.css'
 import './style.css'
 import L from 'leaflet'
-import { createIcons, House, Flower2, MapPin, Info, Mail, Menu, X, Search, ChevronRight, CalendarDays, Leaf, Check, ShieldCheck, TreeDeciduous, Ban, Recycle, Heart, Construction } from 'lucide'
+import { createIcons, House, Flower2, MapPin, Info, Mail, Menu, X, Search, ChevronRight, CalendarDays, Leaf, Check, ShieldCheck, TreeDeciduous, Ban, Recycle, Heart, Construction, Maximize2 } from 'lucide'
 import { especies, MESES } from './especies.js'
 import { pontos, PONTOS_DE_EXEMPLO } from './pontos.js'
 
-const icons = { House, Flower2, MapPin, Info, Mail, Menu, X, Search, ChevronRight, CalendarDays, Leaf, Check, ShieldCheck, TreeDeciduous, Ban, Recycle, Heart, Construction }
+const icons = { House, Flower2, MapPin, Info, Mail, Menu, X, Search, ChevronRight, CalendarDays, Leaf, Check, ShieldCheck, TreeDeciduous, Ban, Recycle, Heart, Construction, Maximize2 }
 const desenharIcones = () => createIcons({ icons, attrs: { 'aria-hidden': 'true' } })
 
 const $ = (s) => document.querySelector(s)
@@ -210,6 +210,43 @@ function limparFiltros() {
 }
 $('#limpar').addEventListener('click', limparFiltros)
 $('#mapa-limpar').addEventListener('click', limparFiltros)
+
+/* ---------- Mapa em tela cheia ---------- */
+// A modal <dialog> gives top layer, inert page behind, Esc and focus return; iPhone Safari has no element Fullscreen API.
+const dialogo = $('#mapa-dialogo')
+const cartaoMapa = $('#mapa-card')
+const lugarDoMapa = document.createComment('mapa')
+const botaoCheia = $('#mapa-cheia')
+let naPilha = false // our history entry, so Android's back button closes the map instead of leaving the page
+
+function ajustarMapa(cheio) {
+  document.documentElement.classList.toggle('overflow-hidden', cheio)
+  botaoCheia.setAttribute('aria-label', cheio ? 'Fechar tela cheia' : 'Abrir mapa em tela cheia')
+  botaoCheia.title = cheio ? 'Fechar' : 'Tela cheia'
+  if (L.Browser.mobile) cheio ? mapa.dragging.enable() : mapa.dragging.disable() // no page to scroll while full screen
+  mapa.invalidateSize()
+  botaoCheia.focus()
+}
+botaoCheia.addEventListener('click', () => {
+  if (dialogo.open) return dialogo.close()
+  cartaoMapa.replaceWith(lugarDoMapa)
+  dialogo.append(cartaoMapa)
+  dialogo.showModal()
+  history.pushState({ mapaCheio: true }, '')
+  naPilha = true
+  ajustarMapa(true)
+})
+dialogo.addEventListener('close', () => {
+  lugarDoMapa.replaceWith(cartaoMapa)
+  ajustarMapa(false)
+  if (naPilha) history.back() // closed by button or Esc: drop our history entry
+})
+addEventListener('popstate', () => {
+  if (!naPilha) return
+  naPilha = false
+  if (dialogo.open) dialogo.close()
+  atualizar({}) // put the current filter back in the URL of the entry we returned to
+})
 
 $('#legenda-mapa').addEventListener('click', (ev) => {
   const e = especies.find((x) => x.id === ev.target.closest('button[data-especie]')?.dataset.especie)

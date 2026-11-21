@@ -113,3 +113,10 @@
 .marcador {
   @apply grid place-items-center rounded-full border-2 border-tinta bg-mel text-tinta shadow-md;
 }
+
+/* Full-screen map: the card fills a modal <dialog>; the map box takes the height left under the filter strip. */
+#mapa-dialogo { margin: 0; padding: 0; border: 0; width: 100%; height: 100dvh; max-width: none; max-height: none; }
+#mapa-dialogo #mapa-card { height: 100%; border: 0; border-radius: 0; }
+#mapa-dialogo .mapa-caixa { aspect-ratio: auto; flex: 1; min-height: 0; }
+.mapa-icone-fechar, #mapa-dialogo .mapa-icone-abrir { display: none; }
+#mapa-dialogo .mapa-icone-fechar { display: block; }
