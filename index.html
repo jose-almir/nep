@@ -25,11 +25,11 @@
     <a href="#conteudo" class="sr-only z-50 rounded-full bg-mel px-4 py-2 font-bold focus:not-sr-only focus:fixed focus:top-3 focus:left-3">Pular para o conteúdo</a>
 
     <!-- Work-in-progress notice; hidden with the rest of [data-pendente] once the team's content is in. -->
-    <div data-pendente class="faixa-obra px-4 py-1.5 text-center">
+    <aside data-pendente aria-label="Aviso" class="faixa-obra px-4 py-1.5 text-center">
       <p class="inline-block rounded-full bg-tinta px-3 py-1 text-xs font-bold text-mel sm:text-sm">
         <i data-lucide="construction" class="mr-1 inline size-4 align-[-3px]"></i>Site em construção · algumas informações e pontos do mapa são provisórios ou fictícios
       </p>
-    </div>
+    </aside>
 
     <header class="sticky top-0 z-40 border-b-4 border-mel bg-white">
       <div class="relative mx-auto flex max-w-7xl items-center gap-4 px-4 py-2 lg:px-8">
@@ -86,7 +86,7 @@
 
       <!-- Espécies -->
       <section id="flores" class="mx-auto max-w-7xl px-4 py-12 lg:px-8" aria-labelledby="flores-titulo">
-        <h2 id="flores-titulo" class="titulo-secao"><i data-lucide="flower-2" class="size-7 shrink-0"></i><span class="shrink-0">Espécies de flores</span></h2>
+        <h2 id="flores-titulo" class="titulo-secao"><i data-lucide="flower-2" class="size-7 shrink-0"></i><span class="shrink-0">Espécies e onde encontrá-las</span></h2>
 
         <div class="mt-6 flex flex-col gap-4">
           <label class="relative block sm:max-w-sm">
@@ -109,6 +109,11 @@
           </p>
         </div>
 
+        <div id="vazio" class="mt-4 hidden rounded-2xl bg-favo p-8 text-center">
+          <p class="font-bold">Nenhuma espécie encontrada com esses filtros.</p>
+          <button id="limpar" type="button" class="btn mt-4">Limpar filtros</button>
+        </div>
+
         <div class="mt-4 overflow-x-auto rounded-2xl border border-tinta/10 bg-favo p-3 sm:p-5">
           <table id="calendario" class="w-full table-fixed border-separate border-spacing-1 text-sm">
             <caption class="mb-2 px-1 text-left text-lg font-extrabold">Calendário de floração</caption>
@@ -118,35 +123,35 @@
           </table>
         </div>
 
-        <ul id="lista-especies" class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4"></ul>
 
-        <div id="vazio" class="mt-4 hidden rounded-2xl bg-favo p-8 text-center">
-          <p class="font-bold">Nenhuma espécie encontrada com esses filtros.</p>
-          <button id="limpar" type="button" class="btn mt-4">Limpar filtros</button>
-        </div>
-      </section>
+        <div id="mapas" data-pendente class="mt-12">
+          <h3 class="flex items-center gap-2 text-xl font-extrabold lg:text-2xl"><i data-lucide="map-pin" class="size-6 shrink-0"></i>Onde encontrar em Ubajara</h3>
+          <p class="mt-1 text-tinta/75">Onde a equipe do NEP encontrou cada espécie na região de Ubajara.</p>
 
-      <!-- Mapas -->
-      <section id="mapas" data-pendente class="bg-favo py-12" aria-labelledby="mapas-titulo">
-        <div class="mx-auto max-w-7xl px-4 lg:px-8">
-          <h2 id="mapas-titulo" class="titulo-secao"><i data-lucide="map-pin" class="size-7 shrink-0"></i><span class="shrink-0">Mapas de Ubajara</span></h2>
-          <p class="mx-auto mt-4 max-w-prose text-center text-lg">Onde a equipe do NEP encontrou cada espécie na região de Ubajara.</p>
-
-          <div class="mt-8 grid gap-5 lg:grid-cols-3">
-            <div class="relative isolate aspect-4/3 overflow-hidden rounded-2xl border border-tinta/10 bg-white lg:col-span-2 lg:aspect-16/10">
+        <div class="mt-5 grid gap-5 lg:grid-cols-3">
+          <div class="flex flex-col overflow-hidden rounded-2xl border border-tinta/10 bg-white lg:col-span-2">
+            <div class="flex min-h-11 items-center justify-between gap-3 border-b border-tinta/10 bg-favo px-4 py-1 text-sm">
+              <p id="mapa-estado"></p>
+              <button id="mapa-limpar" type="button" class="min-h-11 shrink-0 px-1 font-bold underline decoration-mel decoration-2 underline-offset-4 hover:decoration-tinta">Limpar</button>
+            </div>
+            <div class="relative isolate aspect-4/3 lg:aspect-16/10">
               <div id="mapa" class="size-full" role="region" aria-label="Mapa de Ubajara com os pontos de cada espécie"></div>
               <p id="mapa-exemplo" class="pointer-events-none absolute top-3 left-1/2 z-[650] -translate-x-1/2 whitespace-nowrap rounded-full bg-tinta px-3 py-1 text-xs font-bold text-mel">Exemplo · pontos fictícios</p>
             </div>
-            <div class="flex flex-col rounded-2xl border border-tinta/10 bg-white p-4">
-              <div class="flex items-baseline justify-between gap-3 px-2">
-                <h3 class="text-lg font-extrabold">Espécies no mapa</h3>
-                <button id="ver-todos" type="button" class="text-sm font-bold underline decoration-mel decoration-2 underline-offset-4 hover:decoration-tinta">Ver todos</button>
-              </div>
-              <p class="mt-1 px-2 text-sm text-tinta/75">Toque numa espécie para ver onde ela aparece.</p>
-              <ul id="legenda-mapa" class="mt-3 flex flex-col gap-1"></ul>
+          </div>
+          <div class="flex flex-col rounded-2xl border border-tinta/10 bg-white p-4">
+            <div class="flex items-center justify-between gap-3 px-2">
+              <h4 class="text-lg font-extrabold">Espécies no mapa</h4>
+              <button id="ver-todos" type="button" class="min-h-11 px-1 text-sm font-bold underline decoration-mel decoration-2 underline-offset-4 hover:decoration-tinta">Ver todos</button>
             </div>
+            <p class="mt-1 px-2 text-sm text-tinta/75">Toque numa espécie para ver onde ela aparece.</p>
+            <ul id="legenda-mapa" class="mt-3 flex flex-col gap-1"></ul>
           </div>
         </div>
+        </div>
+
+        <ul id="lista-especies" class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4"></ul>
+
       </section>
 
       <!-- Sobre / importância / como ajudar -->

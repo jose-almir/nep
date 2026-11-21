@@ -34,11 +34,13 @@ document.addEventListener('keydown', (e) => {
 
 /* ---------- Link ativo conforme a rolagem ---------- */
 const links = [...menu.querySelectorAll('a')]
+// #mapas sits inside #flores, so track every target in the band and mark the last one in menu order (the innermost).
+const naFaixa = new Set()
 const espiao = new IntersectionObserver(
   (entradas) => {
-    for (const e of entradas) {
-      if (e.isIntersecting) links.forEach((a) => a.setAttribute('aria-current', a.hash === `#${e.target.id}`))
-    }
+    for (const e of entradas) e.isIntersecting ? naFaixa.add(`#${e.target.id}`) : naFaixa.delete(`#${e.target.id}`)
+    const atual = links.findLast((a) => naFaixa.has(a.hash))
+    if (atual) links.forEach((a) => a.setAttribute('aria-current', a === atual))
   },
   { rootMargin: '-45% 0px -50% 0px' },
 )
@@ -153,6 +155,13 @@ function renderizar() {
   const n = visiveis.length
   $('#contagem').textContent =
     (n === 1 ? '1 espécie' : `${n} espécies`) + (filtro.mes ? ` florescendo em ${MESES[filtro.mes - 1]}` : '')
+  // The map repeats the active filter so nobody has to scroll back up to know what it shows.
+  const filtrando = termo || filtro.mes
+  $('#mapa-estado').innerHTML =
+    `<b>${filtro.mes ? `Florescendo em ${MESES[filtro.mes - 1]}` : 'Todas as espécies'}</b>` +
+    (termo ? ` · busca “${filtro.texto.trim().replace(/[<>&"]/g, '')}”` : '') +
+    (filtrando ? ` · ${n === 1 ? '1 espécie' : `${n} espécies`}` : '')
+  $('#mapa-limpar').hidden = !filtrando
   document.querySelectorAll('#meses .chip').forEach((c) => c.setAttribute('aria-pressed', Number(c.value) === filtro.mes))
   document.querySelectorAll('#calendario thead th[data-mes]').forEach((th) => {
     th.classList.toggle('bg-tinta', Number(th.dataset.mes) === filtro.mes)
@@ -195,10 +204,12 @@ $('#meses').addEventListener('click', (e) => {
   if (alvo) atualizar({ mes: Number(alvo.value) })
 })
 $('#busca').addEventListener('input', (e) => atualizar({ texto: e.target.value }))
-$('#limpar').addEventListener('click', () => {
+function limparFiltros() {
   $('#busca').value = ''
   atualizar({ texto: '', mes: 0 })
-})
+}
+$('#limpar').addEventListener('click', limparFiltros)
+$('#mapa-limpar').addEventListener('click', limparFiltros)
 
 $('#legenda-mapa').addEventListener('click', (ev) => {
   const e = especies.find((x) => x.id === ev.target.closest('button[data-especie]')?.dataset.especie)
